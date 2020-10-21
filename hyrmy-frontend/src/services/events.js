@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/blogs'
+const baseUrl = '/api/events'
 
 let token = null
 
@@ -34,15 +34,15 @@ const remove = (id) => {
   return request.then(response => response.data)
 }
 
-const likeBlog = async (id) => {
-  const changedBlog = await axios.get(`${baseUrl}/${id}`)
-  changedBlog.data.likes = changedBlog.data.likes + 1
-  return axios.put(`${baseUrl}/${id}`, changedBlog.data)
+const likeEvent = async (id) => {
+  const changedEvent = await axios.get(`${baseUrl}/${id}`)
+  changedEvent.data.likes = changedEvent.data.likes + 1
+  return axios.put(`${baseUrl}/${id}`, changedEvent.data)
 }
-const commentBlog = async (id, comment) => {
-  const changedBlog = await axios.get(`${baseUrl}/${id}`)
-  changedBlog.data.comments.push(comment)
-  return axios.put(`${baseUrl}/${id}`, changedBlog.data)
+const commentEvent = async (id, comment) => {
+  const changedEvent = await axios.get(`${baseUrl}/${id}`)
+  changedEvent.data.comments.push(comment)
+  return axios.put(`${baseUrl}/${id}`, changedEvent.data)
 }
 
-export default { getAll, create, update, setToken, remove, likeBlog, commentBlog }
+export default { getAll, create, update, setToken, remove, likeEvent, commentEvent }

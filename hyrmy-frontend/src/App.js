@@ -8,70 +8,65 @@ import {
 } from "react-router-dom"
 
 //Components
-import Blogs from './components/Blogs'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import Users from './components/Users'
 import LoginForm from './components/LoginForm'
 import User from './components/User'
 import Header from './components/Header'
-import Blog from './components/Blog'
+import Index from './components/Index'
+import Events from './components/Events'
+import Event from './components/Event'
+
+
 
 
 //Reducers
 import { setLoginFromToken } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
-import { initializeBlogs } from './reducers/blogReducer'
+import { initializeEvents } from './reducers/eventReducer'
 
 //Services
-import blogService from './services/blogs'
+import eventService from './services/events'
 
 const App = (props) => {
 
-  const loggedLoginJSON = window.localStorage.getItem('loggedBlogappLogin')
+  const loggedLoginJSON = window.localStorage.getItem('loggedEventappLogin')
 
   useEffect(() => {
-    props.initializeBlogs()
+    props.initializeEvents()
     props.initializeUsers()
     if (loggedLoginJSON) {
       const login = JSON.parse(loggedLoginJSON)
       props.setLoginFromToken(login)
-      blogService.setToken(login.token)
+      eventService.setToken(login.token)
     }
   }, [])
 
+  const meta = {
+  meta: {
+      charset : 'utf-8'
 
+  }
+}
   return (
-    <div class="container">
-      <Router>
-        <Notification />
 
-        {!props.login ?
-          <div >
-            <LoginForm />
-          </div >
-          :
-          < div >
-            <Header />
-            <Switch>
-              <Route path="/users/:id">
-                <User />
+    <div class="container">
+
+      <Router>
+      <Header />
+        <Notification />
+         <Switch>
+            <Route path="/events/:id">
+                <Event />
               </Route>
-              <Route path="/blogs/:id">
-                <Blog />
+              <Route path="/events">
+                <Events />
               </Route>
-              <Route path="/users">
-                <Users />
-              </Route>
-              <Route path="/blogs">
-                <Blogs />
-                <BlogForm />
+             <Route path="/">
+                <Index {...meta}/>
               </Route>
             </Switch>
-
-          </div>
-        }
         <Footer />
       </Router>
     </div>
@@ -81,7 +76,7 @@ const App = (props) => {
 const dispatchToProps = {
   setLoginFromToken,
   initializeUsers,
-  initializeBlogs
+  initializeEvents
 }
 const mapStateToProps = (state) => {
   return {

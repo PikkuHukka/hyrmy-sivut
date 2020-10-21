@@ -1,17 +1,17 @@
 var lodash = require('lodash')
 
-const dummy = (blogs) => {
+const dummy = (events) => {
   return 1
 }
 
-const totalLikes = (blogs) => {
+const totalLikes = (events) => {
   const reducer = (sum, currentObject) => {
     return sum + currentObject.likes
   }
-  return blogs.reduce(reducer, 0)
+  return events.reduce(reducer, 0)
 }
 
-const favoriteBlog = (blogs) => {
+const favoriteevent = (events) => {
   const reducer = (best, currentObject) => {
     if (currentObject.likes > best) {
       return currentObject.likes
@@ -19,34 +19,34 @@ const favoriteBlog = (blogs) => {
       return best
     }
   }
-  return blogs.reduce(reducer, 0)
+  return events.reduce(reducer, 0)
 }
 
 
 
-const mostBlogs = (blogs) => {
+const mostevents = (events) => {
   var myArray = []
 
-  for (var blog of blogs) {
-    if (lodash.some(myArray, { 'author': blog.author })) {
+  for (var event of events) {
+    if (lodash.some(myArray, { 'author': event.author })) {
       for (var arrayEntry of myArray) {
-        if (arrayEntry.author === blog.author) {
-          arrayEntry.blogs = arrayEntry.blogs + 1
+        if (arrayEntry.author === event.author) {
+          arrayEntry.events = arrayEntry.events + 1
         }
       }
 
     } else {
-      myArray.push({ 'author': blog.author, 'blogs': 1 })
+      myArray.push({ 'author': event.author, 'events': 1 })
     }
   }
 
 
-  var mostBlogs = 0
+  var mostevents = 0
   var mostAuthor = ''
 
   for (var author of myArray) {
-    if (arrayEntry.blogs > mostBlogs) {
-      mostBlogs = author.blogs
+    if (arrayEntry.events > mostevents) {
+      mostevents = author.events
       mostAuthor = author.author
     }
   }
@@ -55,29 +55,29 @@ const mostBlogs = (blogs) => {
   return mostAuthor
 }
 
-const mostLikesByAuthor = (blogs) => {
+const mostLikesByAuthor = (events) => {
   var myArray = []
 
-  for (var blog of blogs) {
-    if (lodash.some(myArray, { 'author': blog.author })) {
+  for (var event of events) {
+    if (lodash.some(myArray, { 'author': event.author })) {
       for (var arrayEntry of myArray) {
-        if (arrayEntry.author === blog.author) {
-          arrayEntry.blogs = arrayEntry.blogs + blog.likes
+        if (arrayEntry.author === event.author) {
+          arrayEntry.events = arrayEntry.events + event.likes
         }
       }
 
     } else {
-      myArray.push({ 'author': blog.author, 'blogs': blog.likes })
+      myArray.push({ 'author': event.author, 'events': event.likes })
     }
   }
 
 
-  var mostBlogLikes = 0
+  var mosteventLikes = 0
   var mostAuthor = ''
 
   for (var author of myArray) {
-    if (arrayEntry.blogs > mostBlogLikes) {
-      mostBlogLikes = author.blogs
+    if (arrayEntry.events > mosteventLikes) {
+      mosteventLikes = author.events
       mostAuthor = author.author
     }
   }
@@ -89,5 +89,5 @@ const mostLikesByAuthor = (blogs) => {
 
 
 module.exports = {
-  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikesByAuthor
+  dummy, totalLikes, favoriteevent, mostevents, mostLikesByAuthor
 }

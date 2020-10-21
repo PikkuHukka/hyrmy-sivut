@@ -15,7 +15,7 @@ export const setLogin = (content) => {
   return async dispatch => {
     const login = await loginService.login(content)
     window.localStorage.setItem(
-      'loggedBlogappLogin', JSON.stringify(login)
+      'loggedEventappLogin', JSON.stringify(login)
     )
     dispatch({
       type: 'SET_LOGIN',

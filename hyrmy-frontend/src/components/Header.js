@@ -25,9 +25,11 @@ const Header = (props) => {
   }
   return (
     <div style={headerStyle}>
-      <Link style={padding} to="/blogs">blogs</Link>
-      <Link style={padding} to="/users">users</Link>
-      <p >Logged in: {props.login.username} <button style={toRight} onClick={handleLogout}>Logout </button></p>
+          <Link style={padding} to="/">Etusivu</Link>
+
+      <Link style={padding} to="/events">Events</Link>
+
+
     </div>
   )
 }

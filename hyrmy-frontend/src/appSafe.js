@@ -2,24 +2,24 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 //Comps
-import Blog from './components/Blog'
+import Event from './components/Event'
 import Notification from './components/Notifications'
-import BlogForm from './components/BlogForm'
+import EventForm from './components/EventForm'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
-import Blogs from './components/Blogs'
+import Events from './components/Events'
 //Services
-import blogService from './services/blogs'
+import eventService from './services/events'
 import loginService from './services/login'
 //Reducers
-import { initializeBlogs } from './reducers/noteReducer'
+import { initializeEvents } from './reducers/noteReducer'
 
 import "./App.css";
 
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [events, setEvents] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -27,21 +27,21 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService
-      .getAll().then(initialBlogs => {
-        initialBlogs.sort(function (a, b) {
+    eventService
+      .getAll().then(initialEvents => {
+        initialEvents.sort(function (a, b) {
           return b.likes - a.likes;
         });
-        setBlogs(initialBlogs)
+        setEvents(initialEvents)
       })
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedEventappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      blogService.setToken(user.token)
+      eventService.setToken(user.token)
     }
   }, [])
 
@@ -54,10 +54,10 @@ const App = () => {
       })
 
       window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
+        'loggedEventappUser', JSON.stringify(user)
       )
 
-      blogService.setToken(user.token)
+      eventService.setToken(user.token)
       setUser(user)
       console.log(user)
       setUsername('')
@@ -73,37 +73,37 @@ const App = () => {
   }
 
   const handleLogout = async (event) => {
-    window.localStorage.removeItem('loggedBlogappUser')
+    window.localStorage.removeItem('loggedEventappUser')
     setUser(null)
   }
 
-  const addBlog = (blogObject) => {
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
+  const addEvent = (eventObject) => {
+    eventService
+      .create(eventObject)
+      .then(returnedEvent => {
+        setEvents(events.concat(returnedEvent))
       })
   }
 
   const handleLike = async (id, event) => {
     try {
-      const filteredList = blogs.filter(b => {
+      const filteredList = events.filter(b => {
         if (b.id === id) {
           return b
         }
       })
-      var likedBlog = filteredList[0]
+      var likedEvent = filteredList[0]
 
-      const updatedBlog = {
-        user: likedBlog.user,
-        likes: likedBlog.likes + 1,
-        author: likedBlog.author,
-        title: likedBlog.title,
-        url: likedBlog.url
+      const updatedEvent = {
+        user: likedEvent.user,
+        likes: likedEvent.likes + 1,
+        author: likedEvent.author,
+        title: likedEvent.title,
+        url: likedEvent.url
       }
 
 
-      var updatedList = blogs.filter(b => {
+      var updatedList = events.filter(b => {
         if (b.id === id) {
           b.likes = b.likes + 1
         }
@@ -112,11 +112,11 @@ const App = () => {
       updatedList.sort(function (a, b) {
         return b.likes - a.likes;
       });
-      setBlogs(updatedList)
+      setEvents(updatedList)
 
 
 
-      const response = await blogService.update(id, updatedBlog)
+      const response = await eventService.update(id, updatedEvent)
       setTimeout(() => {
         setErrorMessage(null)
         setErrorType(null)
@@ -125,7 +125,7 @@ const App = () => {
 
 
     } catch (exception) {
-      setErrorMessage('Liking this blog did not work.')
+      setErrorMessage('Liking this event did not work.')
       setErrorType('error')
       setTimeout(() => {
         setErrorMessage(null)
@@ -136,28 +136,28 @@ const App = () => {
 
 
 
-  const handleRemoveBlog = async (id, event) => {
+  const handleRemoveEvent = async (id, event) => {
 
-    if (!window.confirm("Do you really want to remove this blog?")) {
+    if (!window.confirm("Do you really want to remove this event?")) {
       return
     }
 
     try {
-      const response = await blogService.remove(id)
-      setErrorMessage('Blog was removed.')
+      const response = await eventService.remove(id)
+      setErrorMessage('Event was removed.')
       setErrorType('success')
       setTimeout(() => {
         setErrorMessage(null)
         setErrorType(null)
       }, 5000)
 
-      const newBlogs = blogs.filter(b => {
+      const newEvents = events.filter(b => {
         return b.id !== id;
       });
-      setBlogs(newBlogs)
+      setEvents(newEvents)
 
     } catch (exception) {
-      setErrorMessage('Removing blog did not work.')
+      setErrorMessage('Removing event did not work.')
       setErrorType('error')
       setTimeout(() => {
         setErrorMessage(null)
@@ -183,25 +183,25 @@ const App = () => {
     )
   }
 
-  const newBlog = () => {
+  const newEvent = () => {
 
     return (
-      <Togglable id="new-blog" buttonLabel="new blog">
-        <BlogForm
-          createBlog={addBlog}
+      <Togglable id="new-event" buttonLabel="new event">
+        <EventForm
+          createEvent={addEvent}
         />
       </Togglable>
     )
   }
 
-  const blogList = () => (
+  const eventList = () => (
     <div>
       <p>{user.name} logged in</p>
       <button onClick={() => handleLogout()}>Logout</button>
       <ul>
-        {blogs.map((blog, index) =>
+        {events.map((event, index) =>
           <div key={index}>
-            <Blog newID={index} user={user} blog={blog} handleLike={handleLike} handleRemoveBlog={handleRemoveBlog} />
+            <Event newID={index} user={user} event={event} handleLike={handleLike} handleRemoveEvent={handleRemoveEvent} />
           </div>
         )}
       </ul>
@@ -211,7 +211,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Blogs</h1>
+      <h1>Events</h1>
       < Notification message={errorMessage} type={errorType} />
       {user === null ?
         logInPage()
@@ -219,9 +219,9 @@ const App = () => {
         <div>
           <p>{user.name} logged in</p>
           <button onClick={() => handleLogout()}>Logout</button>
-          <Blogs />
-          {/*blogList()*/}
-          {newBlog()}
+          <Events />
+          {/*eventList()*/}
+          {newEvent()}
         </div>
       }
     </div>
@@ -231,4 +231,4 @@ const App = () => {
 
 
 
-export default connect(null, { initializeBlogs })(App) 
+export default connect(null, { initializeEvents })(App) 

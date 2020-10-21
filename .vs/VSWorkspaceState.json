@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\hyrmy-backend",
-    "\\hyrmy-frontend"
+    ""
   ],
-  "SelectedNode": "\\hyrmy-backend\\config.js",
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
