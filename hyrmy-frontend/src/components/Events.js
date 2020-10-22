@@ -20,9 +20,7 @@ const Events = (props) => {
               <td>
                 <Link to={`events/${event.id}`} ><h3>{`${event.title}`}</h3></Link>
               </td>
-
             </tr>
-
           )}
         </tbody>
 
